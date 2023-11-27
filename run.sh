@@ -25,8 +25,9 @@ echo "7.) Quit"
 
 sleep 1
 printf "\n\n"
-printf "Enter your choice (1-7):" 
+printf "Enter your choice (1-7):  " 
 
+read choice
 
 case $choice in
     1)
@@ -39,13 +40,13 @@ case $choice in
         process_connection
         ;;
     4)
-        # Add your settings logic here
+        ./setiings.sh
         ;;
     5)
         # Add your uninstall logic here
         ;;
     6)
-        # Add your update logic here
+        git clone https://github.com/auburnmedia/ciphershell
         ;;
     7)
         exit 0
