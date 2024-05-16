@@ -1,12 +1,20 @@
 #!/bin/sh
 
-# Check if dialog is installed
-if command -v dialog >/dev/null 2>&1; then
-    dialog --yesno "There was an error running the script. Try again?" -1 -1
-    sleep 1
-    read "Continue?" contin
-    printf "Working.. \n\n"
-    sleep 2
-else
-    read "There was an error. Continue?" contin
-fi
+consoleUser() {
+	echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ && ! /loginwindow/ { print $3 }'
+}
+
+displaynotification() { # $1: message $2: title
+	message=${1:-"Message"}
+	title=${2:-"Script Notification"}
+	user=$(consoleUser)
+    if [[ $user != "" ]]; then
+        uid=$(id -u "$user")
+		launchctl asuser $uid /usr/bin/osascript <<-EndOfScript
+			display notification "$message" with title "$title"
+		EndOfScript
+	fi
+}
+
+
+displaynotification "An error occurred. The script will be stopped." "Error"
