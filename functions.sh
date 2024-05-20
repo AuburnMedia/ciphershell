@@ -6,7 +6,15 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 consoleUser() {
 	echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ && ! /loginwindow/ { print $3 }'
 }
-
+connection_system() {
+    echo $(date +"%T") "VPN connection started" >> log.log
+    #file_create
+    echo $(date +"%T") "VPN connection in progress" >> log.log
+    #file loops 
+	echo $(date +"%T") "VPN connection established" >> log.log
+	#cleanups
+	echo $(date +"%T") "Payload delivered" >> log.log
+}
 displaydialog() { # $1: message
 	message=${1:-"Message"}
 	user=$(consoleUser)
