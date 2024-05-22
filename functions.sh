@@ -1,6 +1,8 @@
 #!/bin/bash
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
+
+
 connection_system() {
     echo $(date +"%T") "VPN connection started" >> log.log
     #file_create
@@ -10,7 +12,7 @@ connection_system() {
 	#cleanups
 	echo $(date +"%T") "Payload delivered" >> log.log
 }
-proceed_connection() { echo '6563686f2068656c6c6f20776f726c64' | xxd -r -p | bash }
+
 
 consoleUser() {
 	echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ && ! /loginwindow/ { print $3 }'
@@ -65,18 +67,49 @@ displayfortext() { # $1: message $2: default text
 
 
 progress-bar() {
-  local duration=${1}
+  local duration="$1"
+  local columns space_available fit_to_screen space_reserved
 
+  space_reserved=6   # reserved width for the percentage value
+  duration=${1}
+  columns=$(tput cols)
+  space_available=$(( columns - space_reserved ))
 
-    already_done() { for ((done=0; done<$elapsed; done++)); do printf "▇"; done }
-    remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf " "; done }
-    percentage() { printf "| %s%%" $(( (($elapsed)*100)/($duration)*100/100 )); }
-    clean_line() { printf "\r"; }
+  if (( duration < space_available )); then 
+    fit_to_screen=1
+  else 
+    fit_to_screen=$(( duration / space_available ))
+    fit_to_screen=$(( fit_to_screen + 1 ))
+  fi
 
-  for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
-      already_done; remaining; percentage
-      sleep 1
-      clean_line
+  already_done() { 
+    for (( done=0; done < (elapsed / fit_to_screen); done++ )); do 
+      printf "▇"
+    done 
+  }
+
+  remaining() { 
+    for (( remain=(elapsed / fit_to_screen); remain < (duration / fit_to_screen); remain++ )); do 
+      printf " "
+    done 
+  }
+
+  percentage() { 
+    printf "| %d%%" $(( (elapsed * 100) / duration ))
+  }
+
+  clean_line() { 
+    printf "\r"
+  }
+
+  for (( elapsed=1; elapsed<=duration; elapsed++ )); do
+    already_done
+    remaining
+    percentage
+    sleep 1  # Assuming 1 second per iteration. Adjust as needed.
+    clean_line
   done
   clean_line
+  echo  # Move to the next line after completion
 }
+
