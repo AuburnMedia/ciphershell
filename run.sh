@@ -1,11 +1,12 @@
 #!/bin/bash
 
+source ./functions.sh
 
 process_connection() {
     if [ "$connected" -eq 1 ]; then
         verified=1
     elif [ "$connected" -eq 182 ] || [ "$connected" -eq 255 ] || [ "$connected" -eq 166 ]; then
-        ./errordebug.sh
+        displaynotification "An error occurred. The script will be stopped." "Error"
     elif [ "$connected" -eq 0 ] || [ "$connected" -eq 2 ]; then
         printf "\nNot connected. Please select 'Connect' or verify that all other VPNs are disabled."
     fi
@@ -40,10 +41,11 @@ case $choice in
         process_connection
         ;;
     4)
-        ./setiings.sh
+        ./settings.sh
         ;;
     5)
-        # Add your uninstall logic here
+        #rm -rf ./
+        echo "Uninstall disabled"
         ;;
     6)
         git clone https://github.com/auburnmedia/ciphershell
