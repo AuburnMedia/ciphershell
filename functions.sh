@@ -70,7 +70,7 @@ progress-bar() {
   local duration="$1"
   local columns space_available fit_to_screen space_reserved
 
-  space_reserved=6   # reserved width for the percentage value
+  space_reserved=6   
   duration=${1}
   columns=$(tput cols)
   space_available=$(( columns - space_reserved ))
@@ -106,10 +106,10 @@ progress-bar() {
     already_done
     remaining
     percentage
-    sleep 1  # Assuming 1 second per iteration. Adjust as needed.
+    sleep 1  
     clean_line
   done
   clean_line
-  echo  # Move to the next line after completion
+  echo 
 }
 
