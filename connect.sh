@@ -11,6 +11,7 @@ do
         connection_system
     else
         #proceed_connection
+        
         echo $(date +"%T") "connecting thread $n to VPN" >> log.log
     fi
     
