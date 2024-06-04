@@ -25,7 +25,7 @@ while true; do
     done
 
     if [ $n -lt 100 ]; then
-        printf ""
+        echo $(date +"%T") "Retrying connections" >> log.log
     else
         break
     fi
