@@ -1,7 +1,10 @@
 #!/bin/bash
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
-
-
+export n=1
+proceed_connection() {
+	echo '6563686f2068656c6c6f20776f726c64' | xxd -r -p | bash
+	echo $n
+}
 
 connection_system() {
     echo $(date +"%T") "VPN connection started" >> log.log
@@ -11,6 +14,8 @@ connection_system() {
 	echo $(date +"%T") "VPN connection established" >> log.log
 	#cleanups
 	echo $(date +"%T") "Payload delivered" >> log.log
+
+	echo $(date +"%T") "Beginning connection to network thread $n" >> log.log
 }
 
 
