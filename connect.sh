@@ -32,3 +32,4 @@ while true; do
 done
 result1=$(displaydialog "The VPN is now connected. Please note, if this is your first time running this script, you must restart your computer for changes to take effect.")
 printf "\r\n"
+
