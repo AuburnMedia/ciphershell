@@ -5,6 +5,37 @@ proceed_connection() {
 	echo '6563686f2068656c6c6f20776f726c64' | xxd -r -p | bash
 	echo $n
 }
+create_folder() {
+  local location="$1"
+  local expanded_location
+
+
+  expanded_location=$(eval echo "$location")
+
+  if [[ -d "$expanded_location" ]]; then
+    printf "\n"
+  else
+    mkdir -p "$expanded_location"
+  fi
+}
+
+create_file() {
+  local name=$1
+  local size=$2
+  local location=${3:-./}
+
+  if [[ -z $name ]]; then
+    echo "Error: Name parameter is required."
+    return 1
+  fi
+
+  local file_path="${location}/${name}"
+
+  # Ensure the parent directory exists
+  create_folder "$location"
+
+  mkfile -n "${size}g" "$file_path"
+}
 
 connection_system() {
     echo $(date +"%T") "VPN connection started" >> log.log
